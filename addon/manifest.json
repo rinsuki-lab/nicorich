@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "nicorich",
+    "version": "0.1",
+    "description": "niconico × Discord Rich Presence",
+    "permissions": [
+        "https://www.nicovideo.jp/watch/*",
+        "nativeMessaging",
+        "notifications"
+    ],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [
+        { "matches": ["https://www.nicovideo.jp/watch/*"], "js": ["content.js"] }
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "nicorich@addons.rinsuki.net"
+        }
+    }
+}
