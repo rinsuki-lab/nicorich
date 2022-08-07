@@ -18,7 +18,7 @@ setTimeout(() => {
     }
     function update(reason) {
         console.info("[nicorich] update, reason =", reason)
-        const ld = JSON.parse(document.querySelector(`script[type="application/ld+json"]:last-child`).innerText)
+        const ld = JSON.parse(Array.from(document.querySelectorAll(`script[type="application/ld+json"]`)).at(-1))
         const normalizedTags = nicoTagNormalize(ld.keywords)
         const shouldHide = video.paused
                         || normalizedTags.includes(nicoTagNormalize("例のアレ"))
@@ -39,6 +39,9 @@ setTimeout(() => {
                     url: ld.url,
                     startedAt,
                 })
+                console.info("[nicorich] send update")
+            } else {
+                console.info("[nicorich] skip update", Math.abs(lastMsgAt - startedAt))
             }
         }
     }
