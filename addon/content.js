@@ -36,7 +36,7 @@ setTimeout(() => {
             if (ld.thumbnailUrl[0]?.startsWith("https://img.cdn.nimg.jp/s/nicovideo/thumbnails/")) {
                 // redirect to https://images.weserv.nl/?w=1280&h=1280&fit=contain&url=...
                 // if we directly uses images.weserv.nl, it will not work (discord restricts about url length?)
-                thumbnailUrl = ld.thumbnailUrl[0].replace("https://img.cdn.nimg.jp/s/nicovideo/thumbnails/", "https://nocothumbredir.deta.dev/v1/sqhd/icnj/")
+                thumbnailUrl = ld.thumbnailUrl[0].replace("https://img.cdn.nimg.jp/s/nicovideo/thumbnails/", "https://nicothumbredir.deta.dev/v1/sqhd/icnj/")
             }
 
             const msg = JSON.stringify(["playing", ld.name, ld.url])
