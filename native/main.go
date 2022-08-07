@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/hugolgst/rich-go/client"
@@ -99,6 +100,7 @@ func main() {
 
 		if err := client.SetActivity(client.Activity{
 			Details: msg.Title,
+			State:   strings.Replace(msg.URL, "https://www.nicovideo.jp/", "", 1),
 			Timestamps: &client.Timestamps{
 				Start: &startedAt,
 			},
