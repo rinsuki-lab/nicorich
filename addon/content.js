@@ -32,11 +32,12 @@ setTimeout(() => {
         if (shouldHide) {
             gone("update: " + reason)
         } else {
-            const thumbnailUrl = new URL("https://images.weserv.nl/")
-            thumbnailUrl.searchParams.set("url", ld.thumbnailUrl[0])
-            thumbnailUrl.searchParams.set("w", 1280)
-            thumbnailUrl.searchParams.set("h", 1280)
-            thumbnailUrl.searchParams.set("fit", "contain")
+            let thumbnailUrl = null
+            if (ld.thumbnailUrl[0]?.startsWith("https://img.cdn.nimg.jp/s/nicovideo/thumbnails/")) {
+                // redirect to https://images.weserv.nl/?w=1280&h=1280&fit=contain&url=...
+                // if we directly uses images.weserv.nl, it will not work (discord restricts about url length?)
+                thumbnailUrl = ld.thumbnailUrl[0].replace("https://img.cdn.nimg.jp/s/nicovideo/thumbnails/", "https://nocothumbredir.deta.dev/v1/sqhd/icnj/")
+            }
 
             const msg = JSON.stringify(["playing", ld.name, ld.url])
             const startedAt = Date.now() - Math.floor(video.currentTime*1000)
@@ -49,7 +50,7 @@ setTimeout(() => {
                     type: "playing",
                     title: ld.name,
                     url: ld.url,
-                    thumbnailUrl: thumbnailUrl.href,
+                    thumbnailUrl,
                     startedAt,
                 })
                 console.info("[nicorich] send update")
