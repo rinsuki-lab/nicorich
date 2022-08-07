@@ -31,7 +31,6 @@ browser.runtime.onMessage.addListener((message, sender) => {
         console.log(message)
         if (sender.tab == null) return
         const tabId = sender.tab.id
-        console.log(message)
         if (message.type === "gone") {
             gone(tabId)
             return true
