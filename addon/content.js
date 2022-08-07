@@ -8,13 +8,14 @@ setTimeout(() => {
     if (video == null) {
         console.warn("[nicorich] video not found")
     }
+    let lastMsg = "", lastMsgAt = 0
     function gone(reason) {
         console.info("[nicorich] gone, reason =", reason)
         browser.runtime.sendMessage({
             type: "gone"
         })
+        lastMsgAt = 0
     }
-    let lastMsg = "", lastMsgAt = 0
     function update(reason) {
         console.info("[nicorich] update, reason =", reason)
         const ld = JSON.parse(document.querySelector(`script[type="application/ld+json"]:last-child`).innerText)
