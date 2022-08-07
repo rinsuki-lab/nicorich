@@ -18,7 +18,7 @@ setTimeout(() => {
     }
     function update(reason) {
         console.info("[nicorich] update, reason =", reason)
-        const ld = JSON.parse(Array.from(document.querySelectorAll(`script[type="application/ld+json"]`)).at(-1))
+        const ld = JSON.parse(Array.from(document.querySelectorAll(`script[type="application/ld+json"]`)).at(-1).innerText)
         const normalizedTags = nicoTagNormalize(ld.keywords)
         const shouldHide = video.paused
                         || normalizedTags.includes(nicoTagNormalize("例のアレ"))
