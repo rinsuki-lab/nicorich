@@ -33,6 +33,9 @@ setTimeout(() => {
             gone("update: " + reason)
         } else {
             let thumbnailUrl = null
+            if (ld.thumbnailUrl.length && typeof ld.thumbnailUrl[0] === "string") {
+                ld.thumbnailUrl[0] = ld.thumbnailUrl[0].replace("http://", "https://")
+            }
             if (ld.thumbnailUrl[0]?.startsWith("https://img.cdn.nimg.jp/s/nicovideo/thumbnails/")) {
                 // redirect to https://images.weserv.nl/?w=1280&h=1280&fit=contain&url=...
                 // if we directly uses images.weserv.nl, it will not work (discord restricts about url length?)
