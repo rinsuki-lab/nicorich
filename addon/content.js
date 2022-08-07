@@ -40,6 +40,25 @@ setTimeout(() => {
                 // redirect to https://images.weserv.nl/?w=1280&h=1280&fit=contain&url=...
                 // if we directly uses images.weserv.nl, it will not work (discord restricts about url length?)
                 thumbnailUrl = ld.thumbnailUrl[0].replace("https://img.cdn.nimg.jp/s/nicovideo/thumbnails/", "https://nicothumbredir.deta.dev/v1/sqhd/icnj/")
+            } else {
+                console.warn("[nicorich] unknown thumbnail", ld.thumbnailUrl[0])
+            }
+            let owner = null
+            
+            if (ld.author?.["@type"] === "Person") {
+                const userID = ld.author.url.replace("https://www.nicovideo.jp/", "")
+                owner = {
+                    type: "user",
+                    text: `投稿者 (${userID}): ${ld.author.name} さん`,
+                    image: document.querySelector("#js-app .WatchAppContainer-main .HeaderContainer .VideoOwnerInfo .OwnerIcon-image[src]").src,
+                }
+            } else if (ld.author?.["@type"] === "Organization") {
+                const channelID = ld.author.url.replace("https://ch.nicovideo.jp/", "")
+                owner = {
+                    type: "channel",
+                    text: `チャンネル (${channelID}): ${ld.author.name}`,
+                    image: ld.author.image.replace("/64x64/", "/128x128/"),
+                }
             }
 
             const msg = JSON.stringify(["playing", ld.name, ld.url])
@@ -55,6 +74,7 @@ setTimeout(() => {
                     url: ld.url,
                     thumbnailUrl,
                     startedAt,
+                    owner,
                 })
                 console.info("[nicorich] send update")
                 sendMessageTimer = null

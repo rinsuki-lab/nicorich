@@ -26,7 +26,13 @@ type Message struct {
 	Title        string `json:"title"`
 	URL          string `json:"url"`
 	ThumbnailURL string `json:"thumbnailUrl"`
+	Owner        *Owner `json:"owner"`
 	StartedAt    int64  `json:"startedAt"`
+}
+
+type Owner struct {
+	Text  string `json:"text"`
+	Image string `json:"image"`
 }
 
 func main() {
@@ -99,7 +105,7 @@ func main() {
 
 		startedAt := time.UnixMilli(msg.StartedAt)
 
-		if err := client.SetActivity(client.Activity{
+		activity := client.Activity{
 			Details:    msg.Title,
 			State:      strings.Replace(msg.URL, "https://www.nicovideo.jp/", "", 1),
 			LargeImage: msg.ThumbnailURL,
@@ -112,7 +118,14 @@ func main() {
 					Url:   msg.URL,
 				},
 			},
-		}); err != nil {
+		}
+
+		if msg.Owner != nil {
+			activity.SmallImage = msg.Owner.Image
+			activity.SmallText = msg.Owner.Text
+		}
+
+		if err := client.SetActivity(activity); err != nil {
 			panic(err)
 		}
 
