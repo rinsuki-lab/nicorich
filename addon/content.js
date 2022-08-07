@@ -8,8 +8,12 @@ setTimeout(() => {
     if (video == null) {
         console.warn("[nicorich] video not found")
     }
-    let lastMsg = "", lastMsgAt = 0
+    let sendMessageTimer = undefined
     function gone(reason) {
+        if (sendMessageTimer == null) {
+            clearTimeout(sendMessageTimer)
+            sendMessageTimer = null
+        }
         console.info("[nicorich] gone, reason =", reason)
         browser.runtime.sendMessage({
             type: "gone"
@@ -36,9 +40,11 @@ setTimeout(() => {
 
             const msg = JSON.stringify(["playing", ld.name, ld.url])
             const startedAt = Date.now() - Math.floor(video.currentTime*1000)
-            if (msg !== lastMsg || Math.abs(lastMsgAt - startedAt) > 5000) {
-                lastMsg = msg
-                lastMsgAt = startedAt
+            if (sendMessageTimer != null) {
+                console.info("[nicorich] overwrite queued update")
+                clearTimeout(sendMessageTimer)
+            }
+            sendMessageTimer = setTimeout(() => {
                 browser.runtime.sendMessage({
                     type: "playing",
                     title: ld.name,
@@ -47,9 +53,8 @@ setTimeout(() => {
                     startedAt,
                 })
                 console.info("[nicorich] send update")
-            } else {
-                console.info("[nicorich] skip update", Math.abs(lastMsgAt - startedAt))
-            }
+                sendMessageTimer = null
+            }, 1000)
         }
     }
     video.addEventListener("play", e => update("ev: play"))
