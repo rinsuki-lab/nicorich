@@ -22,10 +22,11 @@ type AppManifest struct {
 }
 
 type Message struct {
-	Type      string `json:"type"`
-	Title     string `json:"title"`
-	URL       string `json:"url"`
-	StartedAt int64  `json:"startedAt"`
+	Type         string `json:"type"`
+	Title        string `json:"title"`
+	URL          string `json:"url"`
+	ThumbnailURL string `json:"thumbnailUrl"`
+	StartedAt    int64  `json:"startedAt"`
 }
 
 func main() {
@@ -99,8 +100,9 @@ func main() {
 		startedAt := time.UnixMilli(msg.StartedAt)
 
 		if err := client.SetActivity(client.Activity{
-			Details: msg.Title,
-			State:   strings.Replace(msg.URL, "https://www.nicovideo.jp/", "", 1),
+			Details:    msg.Title,
+			State:      strings.Replace(msg.URL, "https://www.nicovideo.jp/", "", 1),
+			LargeImage: msg.ThumbnailURL,
 			Timestamps: &client.Timestamps{
 				Start: &startedAt,
 			},

@@ -28,6 +28,12 @@ setTimeout(() => {
         if (shouldHide) {
             gone("update: " + reason)
         } else {
+            const thumbnailUrl = new URL("https://images.weserv.nl/")
+            thumbnailUrl.searchParams.set("url", ld.thumbnailUrl[0])
+            thumbnailUrl.searchParams.set("w", 1280)
+            thumbnailUrl.searchParams.set("h", 1280)
+            thumbnailUrl.searchParams.set("fit", "contain")
+
             const msg = JSON.stringify(["playing", ld.name, ld.url])
             const startedAt = Date.now() - Math.floor(video.currentTime*1000)
             if (msg !== lastMsg || Math.abs(lastMsgAt - startedAt) > 5000) {
@@ -37,6 +43,7 @@ setTimeout(() => {
                     type: "playing",
                     title: ld.name,
                     url: ld.url,
+                    thumbnailUrl: thumbnailUrl.href,
                     startedAt,
                 })
                 console.info("[nicorich] send update")
